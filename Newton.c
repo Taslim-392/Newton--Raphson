@@ -33,3 +33,37 @@ double d2f(double x, int choice) {
             return 6 * x;
     }
 }
+
+// Classical Newton-Raphson with performance tracking
+int newtonRaphson(double x0, int choice, double* final_root, int* iterations, double* time_taken) {
+    clock_t start = clock();
+    *iterations = 0;
+
+    for (int i=1; i<=MAX_IT; i++) {
+        (*iterations)++;
+        double fx = f(x0, choice);
+        double dfx = df(x0, choice);
+
+        if (fabs(dfx) < EPS) {
+            clock_t end = clock();
+            *time_taken = ((double)(end - start)) / CLOCKS_PER_SEC;
+            return 0; // Failed - derivative too small
+        }
+
+        double x1 = x0 - fx/dfx;
+
+        if (fabs(x1 - x0) < EPS) {
+            *final_root = x1;
+            clock_t end = clock();
+            *time_taken = ((double)(end - start)) / CLOCKS_PER_SEC;
+            return 1; // Success
+        }
+
+        x0 = x1;
+    }
+
+    clock_t end = clock();
+    *time_taken = ((double)(end - start)) / CLOCKS_PER_SEC;
+    return 0; // Failed - max iterations reached
+}
+
