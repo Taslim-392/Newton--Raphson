@@ -147,3 +147,45 @@ void compareMethods(double x0, int choice, const char* function_name) {
     
     printf("\n");
 }
+// Original demonstration functions (for backward compatibility)
+void demoNewtonRaphson(double x0, int choice) {
+    printf("\nClassical Newton-Raphson:\n");
+    for (int i=1; i<=MAX_IT; i++) {
+        double fx = f(x0, choice);
+        double dfx = df(x0, choice);
+        if (fabs(dfx) < EPS) {
+            printf("Derivative too small. Stopping.\n");
+            return;
+        }
+        double x1 = x0 - fx/dfx;
+        printf("Iter %2d: x = %.6f, f(x) = %.6f\n", i, x1, f(x1, choice));
+        if (fabs(x1 - x0) < EPS) {
+            printf("Converged to root: %.6f\n", x1);
+            return;
+        }
+        x0 = x1;
+    }
+    printf("Maximum iterations reached.\n");
+}
+
+void demoModifiedNewton(double x0, int choice) {
+    printf("\nModified Newton-Raphson:\n");
+    for (int i=1; i<=MAX_IT; i++) {
+        double fx = f(x0, choice);
+        double dfx = df(x0, choice);
+        double d2fx = d2f(x0, choice);
+        double denom = dfx*dfx - fx*d2fx;
+        if (fabs(denom) < EPS) {
+            printf("Denominator too small. Stopping.\n");
+            return;
+        }
+        double x1 = x0 - (fx*dfx)/denom;
+        printf("Iter %2d: x = %.6f, f(x) = %.6f\n", i, x1, f(x1, choice));
+        if (fabs(x1 - x0) < EPS) {
+            printf("Converged to root: %.6f\n", x1);
+            return;
+        }
+        x0 = x1;
+    }
+    printf("Maximum iterations reached.\n");
+}
