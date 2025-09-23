@@ -100,3 +100,50 @@ int modifiedNewton(double x0, int choice, double* final_root, int* iterations, d
     *time_taken = ((double)(end - start)) / CLOCKS_PER_SEC;
     return 0; // Failed - max iterations reached
 }
+// Function to compare both methods
+void compareMethods(double x0, int choice, const char* function_name) {
+    printf("\n=== Comparing Methods for %s ===\n", function_name);
+    
+    double root1, root2;
+    int iter1, iter2;
+    double time1, time2;
+    int success1, success2;
+    
+    // Test Classical Newton-Raphson
+    success1 = newtonRaphson(x0, choice, &root1, &iter1, &time1);
+    
+    // Test Modified Newton-Raphson
+    success2 = modifiedNewton(x0, choice, &root2, &iter2, &time2);
+    
+    // Print results
+    printf("\nClassical Newton-Raphson:\n");
+    printf("Status: %s\n", success1 ? "Converged" : "Failed");
+    if (success1) printf("Root: %.6f\n", root1);
+    printf("Iterations: %d\n", iter1);
+    printf("Time taken: %.6f seconds\n", time1);
+    printf("Final f(x): %.6e\n", f(success1 ? root1 : x0, choice));
+    
+    printf("\nModified Newton-Raphson:\n");
+    printf("Status: %s\n", success2 ? "Converged" : "Failed");
+    if (success2) printf("Root: %.6f\n", root2);
+    printf("Iterations: %d\n", iter2);
+    printf("Time taken: %.6f seconds\n", time2);
+    printf("Final f(x): %.6e\n", f(success2 ? root2 : x0, choice));
+    
+    // Comparison analysis
+    printf("\n=== Comparison Analysis ===\n");
+    if (success1 && success2) {
+        printf("Both methods converged to similar roots: %s\n", 
+               fabs(root1 - root2) < EPS ? "Yes" : "No");
+        printf("Speedup factor: %.2fx\n", time1 / time2);
+        printf("Iteration reduction: %.1f%%\n", 
+               (1.0 - (double)iter2/iter1) * 100);
+    }
+    
+    printf("Stability: %s\n", 
+           (success1 && success2) ? "Both stable" :
+           (success1) ? "Classical more stable" :
+           (success2) ? "Modified more stable" : "Both unstable");
+    
+    printf("\n");
+}
