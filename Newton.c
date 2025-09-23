@@ -189,3 +189,33 @@ void demoModifiedNewton(double x0, int choice) {
     }
     printf("Maximum iterations reached.\n");
 }
+
+int main() {
+    double x0;
+
+    // Test Case 1: Well-behaved function
+    printf("Well-behaved function: f(x) = x^2 -5x+1\n");
+    printf("Enter initial guess: ");
+    scanf("%lf", &x0);
+    
+    // Demo original functions
+    demoNewtonRaphson(x0, 1);
+    demoModifiedNewton(x0, 1);
+    
+    // Compare methods with performance metrics
+    compareMethods(x0, 1, "f(x) = x^2 -5x+1");
+
+    // Test Case 2: Ill-conditioned function
+    printf("\nIll-conditioned function: f(x) = x^3 - 2x + 2\n");
+    printf("Enter initial guess: ");
+    scanf("%lf", &x0);
+    
+    // Demo original functions
+    demoNewtonRaphson(x0, 2);
+    demoModifiedNewton(x0, 2);
+    
+    // Compare methods with performance metrics
+    compareMethods(x0, 2, "f(x) = x^3 - 2x + 2");
+
+    return 0;
+}
